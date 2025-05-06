@@ -1,0 +1,986 @@
+/* styles.css */
+
+/* — Root Variables — */
+:root {
+  --color-bg: #fafafa;
+  --color-sidebar: #1e1e1e;
+  --color-accent: #ffb400;
+  --color-accent-light: #fff2cc;
+  --color-primary-text: #333;
+  --color-secondary-text: #666;
+  --radius: 12px;
+  --shadow: 0 4px 12px rgba(0,0,0,0.05);
+  --font-base: 'Inter', sans-serif;
+}
+
+/* — Global Reset — */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-base);
+}
+
+/* — Body Layout — */
+body {
+  display: flex;
+  background: var(--color-bg);
+  color: var(--color-primary-text);
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* — Sidebar — */
+.sidebar {
+  width: 240px;
+  background: var(--color-sidebar);
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+}
+.sidebar h2 {
+  color: var(--color-accent-light);
+  margin-bottom: 1.5rem;
+  font-size: 1.25rem;
+  text-align: center;
+}
+.sidebar ul {
+  list-style: none;
+  flex: 1;
+}
+.sidebar li + li {
+  margin-top: 1rem;
+}
+.sidebar a {
+  color: var(--color-accent-light);
+  text-decoration: none;
+  padding: .5rem;
+  border-radius: var(--radius);
+  transition: background .2s;
+}
+.sidebar a:hover {
+  background: rgba(255,180,0,0.1);
+}
+.logout-button {
+  margin-top: auto;
+  padding: .75rem;
+  background: #e74c3c;
+  color: #fff;
+  text-align: center;
+  border-radius: var(--radius);
+  text-decoration: none;
+}
+
+/* — Main Content Container — */
+.main-content {
+  flex: 1;
+  background: var(--color-bg);
+  padding: 20px;
+  overflow: auto;
+  scroll-behavior: smooth;
+}
+
+/* — Generic Card — */
+.card {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* — Performance Card Styles — */
+.card-stats {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+}
+.card-stats .perf-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.card-stats .performance-icon {
+  font-size: 2rem;
+  color: var(--color-accent);
+}
+.card-stats .level {
+  font-size: 1.2rem;
+  margin-bottom: .75rem;
+}
+.progress-bar.large {
+  background: #eee;
+  border-radius: var(--radius);
+  overflow: hidden;
+  height: 20px;
+  margin-bottom: 1rem;
+}
+.progress-bar.large .progress-fill {
+  background: var(--color-accent);
+  height: 100%;
+  transition: width .6s ease;
+}
+.card-stats .perf-stats {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 1rem;
+}
+.card-stats .stat {
+  flex: 1;
+  text-align: center;
+}
+.card-stats .stat-label {
+  display: block;
+  color: var(--color-secondary-text);
+  font-size: 0.85rem;
+}
+.card-stats .stat-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* — Responsive — */
+@media (max-width: 1024px) {
+  .main-content {
+    padding: 10px;
+  }
+}
+
+/* — Dashboard Grid Layout — */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "leaderboard stats"    
+    "approvals approvals";
+  gap: 1.5rem;
+  height: 100%;
+}
+.card-stats       { grid-area: stats; }
+.card-leaderboard { grid-area: leaderboard; }
+.card-approvals   { grid-area: approvals; }
+.card-stats,
+.card-leaderboard { flex: 0 0 auto; }
+.card-approvals { overflow-y: auto; }
+
+/* Force chart canvas to fill its card */
+.card-leaderboard canvas {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain;
+}
+
+/* — Tasks Table (approvals) — */
+.tasks-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+}
+.tasks-table th,
+.tasks-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+}
+.tasks-table th {
+  background: var(--color-accent-light);
+  color: var(--color-primary-text);
+  font-weight: 600;
+}
+.tasks-table tr:hover {
+  background: rgba(0,0,0,0.03);
+}
+
+/* — Task Submission Form & History Styles — */
+.card.card-approvals {
+  padding: 2rem;
+}
+.card.card-approvals h2,
+.card.card-approvals h3 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  color: var(--color-primary-text);
+}
+.submission-form {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+  align-items: end;
+  margin-bottom: 2rem;
+}
+.submission-form select,
+.submission-form textarea,
+.submission-form input[type="file"] {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  background: #fff;
+}
+.submission-form button[type="submit"] {
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 1rem;
+}
+.submission-form button[type="submit"]:hover {
+  opacity: 0.9;
+}
+.submission-history {
+  width: 100%;
+  border-collapse: collapse;
+}
+.submission-history th,
+.submission-history td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #eee;
+}
+.submission-history th {
+  background: var(--color-accent-light);
+  text-align: left;
+  font-weight: bold;
+}
+.submission-history tr:hover {
+  background: rgba(0,0,0,0.03);
+}
+.submission-history td button {
+  padding: 0.25rem 0.5rem;
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.submission-history td button:hover {
+  background: #c0392b;
+}
+
+/* — Login Page Styles — */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: var(--font-base, Arial, sans-serif);
+}
+.login-bg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+  background: linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%);
+  position: relative;
+  overflow: hidden;
+}
+.login-bg::before {
+  content: "";
+  position: absolute;
+  top: -20%;
+  left: -10%;
+  width: 120%;
+  height: 140%;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20width%3D'800'%20height%3D'600'%3E%3Cpath%20fill%3D'%23ffffff10'%20d%3D'M0%2C300%20C200%2C400%20400%2C200%20800%2C300%20L800%2C600%20L0%2C600%20Z'%20/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  opacity: 0.3;
+  pointer-events: none;
+}
+.login-card {
+  position: relative;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  padding: 2rem;
+  width: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+}
+.login-card h2 {
+  margin-bottom: 1.5rem;
+  color: var(--color-primary-text);
+  font-size: 1.75rem;
+}
+.login-field {
+  width: 100%;
+  max-width: 300px;
+  margin-bottom: 1rem;
+  position: relative;
+}
+.login-field i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+}
+.login-field input {
+  width: 100%;
+  padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.login-field input:focus {
+  border-color: var(--color-accent);
+}
+.login-actions {
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+.login-button {
+  width: 100%;
+  max-width: 300px;
+  padding: 0.75rem;
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.login-button:hover {
+  background: #3b3f9c;
+}
+.error {
+  width: 100%;
+  max-width: 300px;
+  margin: 0.5rem 0 0;
+  text-align: center;
+  color: #e74c3c;
+  font-size: 0.9rem;
+  display: none;
+}
+
+/* — My Projects Grid & Cards — */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+.project-card {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.project-card h3 {
+  margin-top: 0;
+  margin-bottom: .75rem;
+  font-size: 1.25rem;
+}
+.project-card p {
+  margin: .5rem 0;
+  color: var(--color-secondary-text);
+}
+/* Status Badges */
+.badge {
+  display: inline-block;
+  padding: .25rem .5rem;
+  border-radius: var(--radius);
+  font-size: .85rem;
+  font-weight: 500;
+}
+.badge-pending {
+  background: #ffc107; color: #212121;
+}
+.badge-in-progress {
+  background: #03a9f4; color: #fff;
+}
+.badge-completed {
+  background: #4caf50; color: #fff;
+}
+.no-tasks {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--color-secondary-text);
+  padding: 2rem 0;
+}
+
+/* — Claim Task Page Styles — */
+.claim-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+.claim-card {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.claim-card h3 {
+  margin: 0 0 .75rem;
+  font-size: 1.25rem;
+  color: var(--color-primary-text);
+}
+.claim-card p {
+  flex-grow: 1;
+  margin: .5rem 0 1rem;
+  color: var(--color-secondary-text);
+  line-height: 1.4;
+}
+.claim-btn {
+  display: inline-block;
+  width: 100%;
+  padding: .75rem;
+  background: var(--color-accent);
+  color: #fff;
+  font-weight: 500;
+  text-align: center;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background .2s;
+}
+.claim-btn:hover {
+  background: #e6a800;
+}
+
+/* — Rewards Page — */
+.current-points {
+  margin-top: 0.5rem;
+  color: var(--color-secondary-text);
+}
+.rewards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+.reward-card {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.reward-card h3 {
+  margin: 0 0 .75rem;
+  font-size: 1.25rem;
+  color: var(--color-primary-text);
+}
+.reward-card p {
+  flex-grow: 1;
+  margin: .5rem 0 1rem;
+  color: var(--color-secondary-text);
+  line-height: 1.4;
+}
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.cost-badge {
+  display: inline-block;
+  padding: .25rem .5rem;
+  border-radius: var(--radius);
+  background: var(--color-accent-light);
+  color: var(--color-primary-text);
+  font-weight: 500;
+}
+.redeem-btn {
+  padding: .5rem 1rem;
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background .2s;
+}
+.redeem-btn:hover:enabled {
+  background: #e6a800;
+}
+.redeem-btn:disabled {
+  background: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+.reward-image {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+  object-fit: cover;
+}
+
+/* — Flash message alerts — */
+.alert {
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: var(--radius);
+  font-weight: 500;
+}
+.alert-error {
+  background: #f8d7da;
+  color: #721c24;
+}
+.alert-success {
+  background: #d4edda;
+  color: #155724;
+}
+
+/* — Redemption History Styles — */
+.history-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+.history-card {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.history-image {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+.history-card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  color: var(--color-primary-text);
+}
+.spent {
+  font-weight: 500;
+  color: var(--color-accent);
+  margin-bottom: 0.5rem;
+}
+.redemption-date {
+  color: var(--color-secondary-text);
+  font-size: 0.85rem;
+}
+.no-history {
+  text-align: center;
+  color: var(--color-secondary-text);
+  font-style: italic;
+  margin: 2rem 0;
+}
+
+/* — Manage Tasks (Admin/Manager) — */
+.inline-form {
+  display: inline-block;
+  margin: 0;
+}
+.tasks-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+.tasks-table th,
+.tasks-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+}
+.tasks-table th {
+  background: var(--color-accent-light);
+  color: var(--color-primary-text);
+  font-weight: 600;
+}
+.tasks-table tr:hover {
+  background: rgba(0,0,0,0.03);
+}
+.badge-pending {
+  background: #ffc107;
+  color: #212121;
+}
+.badge-in-progress {
+  background: #03a9f4;
+  color: #fff;
+}
+.badge-completed {
+  background: #4caf50;
+  color: #fff;
+}
+.btn {
+  padding: 0.4rem 0.8rem;
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+  margin-left: 0.5rem;
+}
+.btn:hover {
+  background: #e6a800;
+}
+.btn-danger {
+  background: #d9534f;
+}
+.btn-danger:hover {
+  background: #c9302c;
+}
+
+/* — Assign Task Form Styles — */
+.form-card {
+  background: #fff;
+  padding: 2rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  max-width: 600px;
+  margin: 1rem auto;
+}
+.task-form .form-group {
+  margin-bottom: 1.25rem;
+}
+.task-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--color-primary-text);
+}
+.task-form input[type="text"],
+.task-form textarea,
+.task-form select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.task-form input:focus,
+.task-form textarea:focus,
+.task-form select:focus {
+  border-color: var(--color-accent);
+}
+.btn-assign {
+  padding: 0.75rem 1.5rem;
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-assign:hover {
+  background: #e6a800;
+}
+.back-link {
+  display: inline-block;
+  margin-top: 1rem;
+  color: var(--color-accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+.back-link:hover {
+  text-decoration: underline;
+}
+
+/* — Team Members Grid & Cards — */
+.team-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+.team-card {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  text-align: center;
+}
+.team-card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  color: var(--color-primary-text);
+}
+.team-card p {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+  color: var(--color-secondary-text);
+  word-break: break-all;
+}
+.role-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius);
+  background: var(--color-accent);
+  color: #fff;
+  font-size: 0.85rem;
+  text-transform: capitalize;
+}
+.no-team {
+  text-align: center;
+  color: var(--color-secondary-text);
+  font-style: italic;
+  margin: 2rem 0;
+}
+@media (min-width: 700px) {
+  .team-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* — Leaderboard Table Styles — */
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.leaderboard-table th,
+.leaderboard-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #eee;
+}
+.leaderboard-table th {
+  background: var(--color-accent-light);
+  font-weight: 600;
+}
+.leaderboard-table tbody tr:nth-child(odd) {
+  background: #fafafa;
+}
+.leaderboard-table tr:hover {
+  background: rgba(0,0,0,0.05);
+}
+.rank-cell {
+  text-align: center;
+  font-size: 1.2rem;
+}
+.rank-number {
+  display: block;
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+}
+.leaderboard-table th:nth-child(6),
+.leaderboard-table td:nth-child(6) {
+  width: 200px;
+}
+.progress-bar {
+  width: 100%;
+  background: #eee;
+  border-radius: 6px;
+  overflow: hidden;
+  height: 16px;
+  margin-bottom: 0.25rem;
+}
+.progress-bar-fill {
+  background: #4caf50;
+  height: 100%;
+  width: 0;
+  transition: width 0.6s ease;
+  text-align: center;
+  color: #fff;
+  font-size: 0.75rem;
+  line-height: 16px;
+}
+.progress-text {
+  font-size: 0.75rem;
+  color: var(--color-secondary-text);
+}
+
+/* — Manage Rewards Page Styles — */
+.alert-success {
+  background: #d4edda;
+  color: #155724;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+}
+.form-card {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+.form-card .form-group {
+  margin-bottom: 1rem;
+}
+.form-card label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.form-card input[type="text"],
+.form-card input[type="number"],
+.form-card textarea {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  transition: border-color 0.2s
+}
+.form-card input:focus,
+.form-card textarea:focus {
+  border-color: var(--color-accent);
+}
+.card-rewards {
+  background: #fff;
+  padding: 1rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow-x: auto;
+}
+.card-rewards .tasks-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.card-rewards th,
+.card-rewards td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+}
+.card-rewards th {
+  background: var(--color-accent-light);
+  color: var(--color-primary-text);
+  font-weight: 600;
+}
+.card-rewards tr:nth-child(odd) {
+  background: #fafafa;
+}
+.card-rewards tr:hover {
+  background: rgba(0,0,0,0.05);
+}
+.reward-thumb {
+  max-width: 50px;
+  height: auto;
+  border-radius: 4px;
+}
+.btn {
+  padding: 0.4rem 0.8rem;
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 0.2s;
+  margin-left: 0.5rem;
+}
+.btn:hover {
+  background: #e6a800;
+}
+.btn-danger {
+  background: #d9534f;
+}
+.btn-danger:hover {
+  background: #c9302c;
+}
+.back-link {
+  display: inline-block;
+  margin-top: 1.5rem;
+  color: var(--color-accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+.back-link:hover {
+  text-decoration: underline;
+}
+
+/* — User Info Bar — */
+.user-info {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.user-info .greeting {
+  font-size: 1.25rem;
+  color: var(--color-primary-text);
+}
+.user-info .role-display {
+  font-size: 1rem;
+  color: var(--color-secondary-text);
+}
+
+/* — Popup Modal — */
+.popup-modal {
+  display: none;               /* hidden by default */
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.5);
+  z-index: 10000;
+}
+.popup-modal.show {
+  display: flex;               /* flex-center when visible */
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-modal .popup-content {
+  background: #fff;
+  padding: 2rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+}
+
+.popup-modal .popup-content button {
+  margin-top: 1.5rem;
+  padding: 0.6rem 1.2rem;
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: opacity 0.2s;
+}
+.popup-modal .popup-content button:hover {
+  opacity: 0.9;
+}
+
+
