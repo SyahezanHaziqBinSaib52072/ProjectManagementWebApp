@@ -1,5 +1,4 @@
 <?php
-// login.php
 session_start();
 include __DIR__ . '/includes/db_connection.php';
 
@@ -24,7 +23,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if ($user = $result->fetch_assoc()) {
-    // Plaintext check—switch to password_verify() if you hash in future
+    // Plaintext check—switch to password_verify() if hashed in future
     if ($password === $user['Password']) {
         // ✅ AUTH SUCCESS: set sessions and redirect
         $_SESSION['user_id'] = $user['User_ID'];

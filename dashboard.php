@@ -56,7 +56,7 @@ $progress   = ($nextMin > $currentMin)
             ? (($gdata['Points_Earned'] - $currentMin) / ($nextMin - $currentMin)) * 100
             : 100;
 
-// 2) Leaderboard labels
+// Leaderboard labels
 $labelStmt = $conn->prepare("
     SELECT DISTINCT U.Name
     FROM Users U
@@ -66,7 +66,7 @@ $labelStmt = $conn->prepare("
 $labelStmt->execute();
 $labels = $labelStmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
-// 3) Pending approvals (admin/manager)
+// Pending approvals (admin/manager)
 if ($role === 'Admin' || $role === 'Manager') {
     $aprSql = "
         SELECT TS.Submission_ID, T.Task_Name, TS.Description, TS.FilePath,
@@ -80,7 +80,7 @@ if ($role === 'Admin' || $role === 'Manager') {
     $aprResult = $conn->query($aprSql);
 }
 
-// 4) Member tasks & submissions
+//Member tasks & submissions
 if ($role === 'Member') {
     // Available tasks
     $taskQuery = "
@@ -153,14 +153,13 @@ if ($role === 'Member') {
 
 <!-- Main Content -->
 <div class="main-content">
-   <!-- ── New User Info Bar ── -->
    <div class="user-info">
     <p class="greeting">Welcome, <strong><?= htmlspecialchars($userName) ?></strong></p>
     <p class="role-display"><?= htmlspecialchars(ucfirst($role)) ?></p>
   </div>
   <div class="dashboard-grid">
 
-    <!-- 1) Performance Card -->
+    <!--  Performance Card -->
     <div class="card card-stats">
       <div class="perf-header">
         <h2>Your Performance</h2>
@@ -186,7 +185,7 @@ if ($role === 'Member') {
       </div>
     </div>
 
-    <!-- 2) Leaderboard Card -->
+    <!-- Leaderboard Card -->
     <div class="card card-leaderboard">
       <h2>🏆 Leaderboard</h2>
       <select id="leaderboard-filter">
@@ -197,7 +196,7 @@ if ($role === 'Member') {
       <canvas id="leaderboardChart"></canvas>
     </div>
 
-    <!-- 3) Approvals or Submission Card -->
+    <!-- Approvals or Submission Card -->
     <div class="card card-approvals">
       <?php if ($role === 'Admin' || $role === 'Manager'): ?>
         <h2>Pending Task Approvals</h2>
